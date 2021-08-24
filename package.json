@@ -1,0 +1,23 @@
+{
+  "name": "polygon_nft_workshop",
+  "version": "1.0.0",
+  "description": "A workshop to build an NFT smart contract on the polygon blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/banjtheman/polygon_nft_workshop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/banjtheman/polygon_nft_workshop/issues"
+  },
+  "homepage": "https://github.com/banjtheman/polygon_nft_workshop#readme",
+  "dependencies": {
+    "truffle-privatekey-provider": "^1.5.0"
+  }
+}
