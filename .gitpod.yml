@@ -7,15 +7,12 @@ ports:
 tasks:
   - init: echo 'init script' # runs during prebuild
     command: echo 'start script'
-
-  - init: npm install -g truffle
-    command: echo "truffle installed"
-
+    
   - init: npm install --save-dev
     command: echo "npm install done"
 
   - init: pip install -r requirements.txt
     command: streamlit run walkthrough_st.py
-    openMode: split-right
+    openMode: split-left
 
 

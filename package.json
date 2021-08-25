@@ -4,7 +4,8 @@
   "description": "A workshop to build an NFT smart contract on the polygon blockchain",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npm i -g truffle"
   },
   "repository": {
     "type": "git",
