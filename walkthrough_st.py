@@ -109,7 +109,25 @@ def render_module(module) -> None:
         )
 
     if module == "4. Edit Smart Contract":
-        st.write("Ok")
+        st.write("In this module we are going to edit the smart contract code.")
+        st.markdown("* Open MyNFT.sol in the contracts folder")
+        st.markdown("* On line 9 replace 'REPLACE_NAME' with your NFT contract name")
+        st.markdown("* On line 16 replace 'REPLACE_NAME' with your NFT contract name")
+        st.markdown("* On line 16 replace 'REPLACE_SYM' with your NFT contract symbol")
+
+    if module == "5. Get MATIC from Facuet":
+        st.write(
+            "Before we can deploy to the testnet we will need to get MATIC from the facuet"
+        )
+        st.write(
+            "The Faucet allows you to get free MATIC on test networks, simply enter your public key to get funds"
+        )
+        st.write("https://faucet.matic.network/")
+
+        st.image("images/matic_faucet.png")
+
+    if module == "6. Deploy Smart Contract":
+        st.write("OK")
 
 
 def sidebar_navigation() -> None:
