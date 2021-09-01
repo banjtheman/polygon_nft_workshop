@@ -1,6 +1,4 @@
-const PrivateKeyProvider = require("truffle-privatekey-provider");
-
-// const NODE_API_KEY = process.env.INFURA_KEY || process.env.ALCHEMY_KEY;
+const PrivateKeyProvider = require("@truffle/hdwallet-provider");
 const INFURA_KEY = process.env.INFURA_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 

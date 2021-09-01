@@ -20,5 +20,10 @@
   "homepage": "https://github.com/banjtheman/polygon_nft_workshop#readme",
   "dependencies": {
     "truffle-privatekey-provider": "^1.5.0"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.3.1",
+    "@truffle/hdwallet-provider": "^1.5.0",
+    "openzeppelin-solidity": "^4.3.1"
   }
 }
