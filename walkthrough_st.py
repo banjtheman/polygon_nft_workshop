@@ -7,9 +7,12 @@ Purpose:
 import logging
 import os
 import streamlit as st
+from typing import Type, Union, Dict, Any, List
+import glob
+from pathlib import Path
 
 # Local Python Library Imports
-
+from modules import utils, mint_nft, pinata_api
 
 ###
 # Streamlit Main Functionality
@@ -110,10 +113,13 @@ def render_module(module) -> None:
 
     if module == "4. Edit Smart Contract":
         st.write("In this module we are going to edit the smart contract code.")
-        st.markdown("* Open MyNFT.sol in the contracts folder")
+        st.markdown("* Open contracts/MyNFT.sol")
         st.markdown("* On line 9 replace 'REPLACE_NAME' with your NFT contract name")
         st.markdown("* On line 16 replace 'REPLACE_NAME' with your NFT contract name")
         st.markdown("* On line 16 replace 'REPLACE_SYM' with your NFT contract symbol")
+
+        st.write("Open migrations/2_deploy_contracts.js")
+        st.markdown("* On line 1 replace 'REPLACE_NAME' with your NFT contract name")
 
     if module == "5. Get MATIC from Facuet":
         st.write(
@@ -127,7 +133,298 @@ def render_module(module) -> None:
         st.image("images/matic_faucet.png")
 
     if module == "6. Deploy Smart Contract":
-        st.write("OK")
+        st.write(
+            "In the terminal run the command below, with your values to deploy your smart contract to the blockchain"
+        )
+
+        st.info(
+            "To export your private key follow: https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-Export-an-Account-Private-Key"
+        )
+
+        st.code(
+            "INFURA_KEY=YOUR_KEY OWNER_ADDRESS=YOUR_PUBLIC_KEY PRIVATE_KEY=YOUR_PRIVATE_KEY CONTRACTS_DIR=./contracts/ CONTRACTS_BUILD=./build/contracts truffle migrate --reset --network mumbai"
+        )
+
+    if module == "7. View contract on Polygon Scan":
+        st.write("Once the contract is deployed you can view it at the following URL")
+        st.write("https://mumbai.polygonscan.com/address/YOUR_CONTRACT_ADDRESS")
+        st.image("images/polygon_scan.png")
+
+    if module == "8. Sign up for Pinata":
+        st.write(
+            "Now that our contract is deployed, the next thing we need to do is mint an NFT"
+        )
+        st.write(
+            "We will leveagre Pinata (https://www.pinata.cloud/) to store our NFT Metadata"
+        )
+        st.write("Create an acocunt and save your API keys")
+
+    if module == "9. Create Metadata JSON":
+        st.write("Now we can populate the fields needed for the metadata json")
+
+        st.info(
+            "To learn more about the metadata fields read this article: https://docs.opensea.io/docs/metadata-standards"
+        )
+        st.write("Fill in the fields below to create your NFT metadata")
+
+        create_metadata_json()
+
+    if module == "10. Mint NFT":
+        st.write("Now we can mint an NFT using the metadata you just pinned to IPFS")
+
+        st.write("Run the following commands to mint your NFT")
+
+        st.info(
+            "The Application Binary Interface (ABI) is a JSON file that will be in the ./build/contracts/ directory "
+        )
+
+        st.markdown(
+            """
+        ```
+        cd scripts/
+        export PUBLIC_KEY=PUBLIC_KEY
+        export PRIVATE_KEY=PRIVATE_KEY
+        export INFURA_KEY=INFURA_KEY
+        export NETWORK="mumbai"
+        python mint_nft.py --contract_address CONTRACT_ADDRESS --abi_path ABI_PATH --to_address TO_ADDRESS --token_metadata_url
+        ```
+        """
+        )
+
+    if module == "11. View NFT on OpenSea":
+
+        st.write(
+            "Once items have been minted, you can view your collection and items on OpenSea."
+        )
+
+        st.write(
+            f"OpenSea URL: https://testnets.opensea.io/collection/CONTRACT_ADDRESS/"
+        )
+
+
+def get_items() -> List:
+    """
+    Purpose:
+        Load list of items
+    Args:
+        N/A
+    Returns:
+        items
+    """
+    items = {}
+
+    json_files = glob.glob("metadata_jsons/*.json")
+
+    for json_file in json_files:
+
+        json_obj = utils.load_json(json_file)
+        key = Path(json_file).stem
+        item_name = json_obj["item"]["name"]
+        items[f"{item_name}_{key}"] = json_obj
+
+    return items
+
+
+def mint_nft_module():
+    """
+    Purpose:
+        Mint your NFT
+    Args:
+        N/A
+    Returns:
+        N/A
+    """
+    items = get_items()
+    item_list = list(items.keys())
+    item_list_name = st.selectbox("Items", item_list)
+
+    if item_list_name:
+
+        item_obj = items[item_list_name]
+
+        token_uri = item_obj["ipfs_url"]
+        item_json = item_obj["item"]
+
+        st.write("Item metadata")
+        st.write(item_json)
+
+        token_address = st.text_input("Address to send token", "")
+
+        if st.button(f"Mint token"):
+            with st.spinner("Minting..."):
+                eth_json = mint_nft.set_up_blockchain(
+                    contract,
+                    abi_path,
+                    public_key,
+                    private_key,
+                    infura_key,
+                    network,
+                )
+
+                txn_hash = mint_nft.web3_mint(token_address, token_uri, eth_json)
+
+                if network == "mumbai":
+                    scan_url = "https://explorer-mumbai.maticvigil.com/tx/"
+                elif network == "rinkeby":
+                    scan_url = "https://rinkeby.etherscan.io/tx/"
+
+                st.success(f"txn hash: {txn_hash}")
+                st.write(f"{scan_url}{txn_hash}")
+                st.balloons()
+
+
+def create_metadata_json():
+    """
+    Purpose:
+        Create metadata JSON
+    Args:
+        N/A
+    Returns:
+        N/A
+    """
+
+    item_json = create_item()
+
+    st.subheader("Current Metadata")
+    st.write(item_json)
+
+    st.write("Enter in your pinata.cloud API keys")
+    st.write("https://pinata.cloud/keys")
+
+    pinata_key = st.text_input("Pinata Key", "", type="password")
+    pinata_secret_key = st.text_input("Pinata Secret key", "", type="password")
+
+    if st.button("Pin Metadata to IPFS"):
+        hash_info = pinata_api.pinJSONToIPFS(item_json, pinata_key, pinata_secret_key)
+
+        ipfs_hash = hash_info["IpfsHash"]
+        item_final_json = {}
+        item_final_json["hash_info"] = hash_info
+        item_final_json["item"] = item_json
+        item_final_json["url"] = f"https://gateway.pinata.cloud/ipfs/{ipfs_hash}"
+        item_final_json["ipfs_url"] = f"ipfs://{ipfs_hash}"
+
+        utils.save_json(f"metadata_jsons/{ipfs_hash}.json", item_final_json)
+
+        st.write(item_final_json["url"])
+
+
+def create_item():
+    """
+    Purpose:
+        Shows the create item screen
+    Args:
+        N/A
+    Returns:
+        N/A
+    """
+    st.subheader("Create new item")
+
+    item_name = st.text_input("Item name", "", help="Name of the item.")
+    ext_url = st.text_input(
+        "External URL",
+        "",
+        help="This is the URL that will appear below the asset's image on OpenSea and will allow users to leave OpenSea and view the item on your site.",
+    )
+    item_desc = st.text_input(
+        "Description",
+        "",
+        help="A human readable description of the item. Markdown is supported.",
+    )
+    image_url = st.text_input(
+        "Image Url",
+        "",
+        help="This is the URL to the image of the item. Can be just about any type of image (including SVGs, which will be cached into PNGs by OpenSea, and even MP4s), and can be IPFS URLs or paths. We recommend using a 350 x 350 image.",
+    )
+
+    item_color = st.color_picker(
+        "background_color",
+        "#ffffff",
+        help="Background color of the item on OpenSea. Must be a six-character hexadecimal without a pre-pended #.",
+    )
+
+    animation_url = st.text_input(
+        "animation_url",
+        "",
+        help="A URL to a multi-media attachment for the item. The file extensions GLTF, GLB, WEBM, MP4, M4V, OGV, and OGG are supported, along with the audio-only extensions MP3, WAV, and OGA.Animation_url also supports HTML pages, allowing you to build rich experiences and interactive NFTs using JavaScript canvas, WebGL, and more. Scripts and relative paths within the HTML page are now supported. However, access to browser extensions is not supported.",
+    )
+
+    youtube_url = st.text_input(
+        "youtube_url",
+        "",
+        help="A URL to a YouTube video.",
+    )
+
+    # This is where session state will shine
+    if "attrs" not in st.session_state:
+        st.session_state.attrs = 1
+
+    if st.button("Add attribute"):
+        st.session_state.attrs += 1
+
+    if st.button("Remove attribute"):
+        st.session_state.attrs -= 1
+
+    attr_types = ["Text", "Number", "Date"]
+    attr_list = []
+
+    for index in range(st.session_state.attrs):
+
+        st.subheader(f"Attribute {index}")
+
+        attr_json = {}
+        attr_type = st.selectbox(
+            "Attribute type", attr_types, key=f"attr_types_index_{index}"
+        )
+
+        if attr_type == "Text":
+
+            trait_type = st.text_input("trait type", "", key=f"trait_index_{index}")
+            value = st.text_input("Value", "", key=f"value_index_{index}")
+
+            attr_json["trait_type"] = trait_type
+            attr_json["value"] = value
+
+        if attr_type == "Number":
+
+            display_types = ["number", "boost_number", "boost_percentage", "ranking"]
+            display_type = st.selectbox(
+                "dislay type", display_types, key=f"display_index_{index}"
+            )
+
+            trait_type = st.text_input("trait type", "", key=f"trait_index_{index}")
+            value = st.text_input("Value", "", key=f"value_index_{index}")
+
+            if not display_type == "ranking":
+                attr_json["display_type"] = display_type
+            attr_json["trait_type"] = trait_type
+            attr_json["value"] = value
+
+        if attr_type == "Date":
+
+            trait_type = st.text_input("trait type", "", key=f"trait_index_{index}")
+
+            st.write("Pass in a unix timestamp for the value")
+            value = st.text_input("Value", "", key=f"value_index_{index}")
+
+            attr_json["display_type"] = "date"
+            attr_json["trait_type"] = trait_type
+            attr_json["value"] = value
+
+        attr_list.append(attr_json)
+
+    item_json = {}
+    item_json["name"] = item_name
+    item_json["image"] = image_url
+    item_json["external_url"] = ext_url
+    item_json["description"] = item_desc
+    item_json["background_color"] = item_color.replace("#", "")
+    item_json["animation_url"] = animation_url
+    item_json["youtube_url"] = youtube_url
+    # attrs = st.session_state.attrs
+    item_json["attributes"] = attr_list
+
+    return item_json
 
 
 def sidebar_navigation() -> None:
@@ -153,9 +450,8 @@ def sidebar_navigation() -> None:
         "7. View contract on Polygon Scan",
         "8. Sign up for Pinata",
         "9. Create Metadata JSON",
-        "10. Pin Metadata JSON to IPFS",
-        "11. Mint NFT",
-        "12. View NFT on OpenSea",
+        "10. Mint NFT",
+        "11. View NFT on OpenSea",
     ]
 
     module = st.sidebar.selectbox("Modules", modules)
