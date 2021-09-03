@@ -73,7 +73,7 @@ def set_up_blockchain(contract: str, abi_path: str):
         CHAIN_ID = 80001
 
         open_sea_url = f"https://testnets.opensea.io/assets/{contract}/"
-        scan_url = "https://explorer-mumbai.maticvigil.com/tx/"
+        scan_url = "https://mumbai.polygonscan.com/tx/"
 
     elif network == "matic_main":
         POLYGON_API_URL = f"https://polygon-mainnet.infura.io/v3/{INFURA_KEY}"
@@ -165,7 +165,7 @@ def main():
     parser.add_argument(
         "--abi_path",
         type=str,
-        help="abi_path for NFT contract, example: ../build/contracts/contracts_NFTNAME/NFTNANE.json",
+        help="abi_path for NFT contract, example: ../build/contracts/NFTNANE.json",
         required=True,
     )
 

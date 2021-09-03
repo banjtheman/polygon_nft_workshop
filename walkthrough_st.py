@@ -145,6 +145,82 @@ def render_module(module) -> None:
             "INFURA_KEY=YOUR_KEY OWNER_ADDRESS=YOUR_PUBLIC_KEY PRIVATE_KEY=YOUR_PRIVATE_KEY CONTRACTS_DIR=./contracts/ CONTRACTS_BUILD=./build/contracts truffle migrate --reset --network mumbai"
         )
 
+        st.info("The following is an example deployment")
+
+        st.code(
+            """
+Starting migrations...
+======================
+> Network name:    'mumbai'
+> Network id:      80001
+> Block gas limit: 20000000 (0x1312d00)
+
+
+1_initial_migration.js
+======================
+
+Deploying 'Migrations'
+----------------------
+> transaction hash:    0xf3d215e6a4a6c1aed672eb76e52ce64d78c2ff6b80948b08ab5aa403643830ab
+> Blocks: 3            Seconds: 4
+> contract address:    0xf690F0BE8121A320a549eD5056c650A058A76C35
+> block number:        18438906
+> block timestamp:     1630632091
+> account:             0xd714c8126D36b286d88c4F5Dc7f7f361b92acF11
+> balance:             2.6870108915
+> gas used:            245600 (0x3bf60)
+> gas price:           1 gwei
+> value sent:          0 ETH
+> total cost:          0.0002456 ETH
+
+Pausing for 2 confirmations...
+------------------------------
+> confirmation number: 2 (block: 18438909)
+
+> Saving migration to chain.
+> Saving artifacts
+-------------------------------------
+> Total cost:           0.0002456 ETH
+
+
+2_deploy_contracts.js
+=====================
+
+Deploying 'WorkshopTest'
+------------------------
+> transaction hash:    0x65498b86d83a8c63dd206c3a177a9fb35245cc3e29f6fe9bdecc8894468d59f0
+> Blocks: 2            Seconds: 4
+
+######################## THIS IS YOUR NFT CONTRACT ########################
+> contract address:    0x637868A804816f2c78bf8fb8a877714f4D8381BB    
+######################## THIS IS YOUR NFT CONTRACT ########################
+
+> block number:        18438916
+> block timestamp:     1630632115
+> account:             0xd714c8126D36b286d88c4F5Dc7f7f361b92acF11
+> balance:             2.6827823105
+> gas used:            4182668 (0x3fd28c)
+> gas price:           1 gwei
+> value sent:          0 ETH
+> total cost:          0.004182668 ETH
+
+Pausing for 2 confirmations...
+------------------------------
+> confirmation number: 2 (block: 18438919)
+
+> Saving migration to chain.
+> Saving artifacts
+-------------------------------------
+> Total cost:         0.004182668 ETH
+
+
+Summary
+=======
+> Total deployments:   2
+> Final cost:          0.004428268 ETH
+        """
+        )
+
     if module == "7. View contract on Polygon Scan":
         st.write("Once the contract is deployed you can view it at the following URL")
         st.write("https://mumbai.polygonscan.com/address/YOUR_CONTRACT_ADDRESS")
@@ -198,7 +274,11 @@ def render_module(module) -> None:
         )
 
         st.write(
-            f"OpenSea URL: https://testnets.opensea.io/collection/CONTRACT_ADDRESS/"
+            f"OpenSea URL: https://testnets.opensea.io/assets/mumbai/CONTRACT_ADDRESS/0"
+        )
+
+        st.info(
+            "You may have to enter your contrarct address into the OpenSea search box"
         )
 
 
