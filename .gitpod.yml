@@ -12,11 +12,8 @@ ports:
 # List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:  
   - init: npm install --save-dev
-    command: echo "npm install done"
-
-  - init: npm i -g truffle
-    command: echo "installed truffle"
-
+    command: npm i -g truffle
+    
   - init: pip install -r requirements.txt
     command: streamlit run walkthrough_st.py
     openMode: split-right
