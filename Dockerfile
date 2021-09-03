@@ -1,11 +1,9 @@
 FROM gitpod/workspace-full
 
-WORKDIR /home
-
 # Install deps
-ADD requirements.txt /home/
-ADD package-lock.json /home/
-ADD package.json /home/
+ADD requirements.txt ./
+ADD package-lock.json ./
+ADD package.json ./
 RUN pip install -r requirements.txt
 RUN npm install --save-dev
 RUN npm install truffle -g
