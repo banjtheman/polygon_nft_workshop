@@ -298,6 +298,8 @@ Summary
             "Once your subgraph is created you can use the graph-cli to initalize your subgraph"
         )
         st.code("graph init --studio test_graph")
+        st.code("graph auth --studio YOUR_API_KEY")
+        st.code("cd test_graph")
 
     if module == "14. Deploy your subgraph":
         st.write("Now we need to update the generated code")
@@ -310,8 +312,82 @@ Summary
         st.write("Now add the `startBlock` field in subgraph.yaml")
         st.image("images/add_startblock.png")
 
+        st.markdown("**2. Update the schema.graphql**")
 
-        st.markdown("**2. Add the startblock to the subgraph.yaml**")
+        st.write(
+            "Update the schema.graphql file and replace `YOUR_ENTITY_NAME` with your NFT name"
+        )
+        st.code(
+            """
+type YOUR_NFT_NAME @entity {
+    id: ID!
+    tokenURI: String!
+    owner: String!
+    tokenID: Int!
+}
+        """
+        )
+
+        st.markdown("**3. Update src/mapping.ts**")
+        st.write("Replace the code with the following, while adding in your values")
+        st.code(
+            """
+import { BigInt } from "@graphprotocol/graph-ts"
+import {
+YOUR_NFT_CONTRACT,
+Transfer
+} from "../generated/YOUR_NFT_CONTRACT/YOUR_NFT_CONTRACT"
+import { YOUR_ENTITY } from "../generated/schema"
+
+export function handleTransfer(event: Transfer): void {
+// Entities can be loaded from the store using a string ID; this ID
+// needs to be unique across all entities of the same type
+
+var token_id = event.params.tokenId.toString()
+var token_id_int = event.params.tokenId.toI32()
+
+
+let my_nft = YOUR_ENTITY.load(token_id)
+
+if (!gitnft_val) {
+    my_nft = new YOUR_ENTITY(event.params.tokenId.toString())
+
+    let tokenContract = YOUR_NFT_CONTRACT.bind(event.address);
+    my_nft.owner = event.params.to.toHexString()
+    my_nft.tokenURI = tokenContract.tokenURI(event.params.tokenId);
+    my_nft.tokenID = token_id_int
+
+
+}
+else {
+    // todo update token uri
+    my_nft.owner = event.params.to.toHexString()
+    TODO
+    my_nft.tokenID = token_id_int
+}
+
+
+my_nft.save();
+
+    }
+    """
+        )
+
+        st.markdown("**4. Deploy your subgraph**")
+        st.write("Run the following commands to deploy your subgraph")
+        st.code("graph codegen && graph build")
+        st.code("graph deploy --studio test_graph")
+
+    if module == "15. Query your NFT Contract":
+        st.write("Now you can query you subgraph in The Graph Studio")
+        st.image("images/subgraph_example.png")
+
+        st.write("You can also use the provided script to query your subgraph")
+
+        st.code("cd scripts")
+        st.code(
+            "python query_graph.py --address YOUR_ADDRESS --entity_name YOUR_ENTIY_NAME --subgraph_api YOUR_API_ENDPOINT"
+        )
 
 
 def get_items() -> List:
