@@ -16,7 +16,7 @@ ports:
 
 # List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-  - init: npm install --save-dev
+  - init: echo "npm already run"
     command: echo "npm install done"
 
   - init: pip install -r requirements.txt

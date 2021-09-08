@@ -6,11 +6,12 @@ By the end of this workshop, you will have completed the following
 * Deploy a smart contract to Polygon leveraging [Infura](https://infura.io/)
 * Store NFT metadata on [IPFS](https://ipfs.io/) using [Pinata](https://www.pinata.cloud/)
 * Mint an NFT that is listed on [OpenSea](https://opensea.io/)
+* Query your NFT contract using [The Graph](https://thegraph.com/)
 
 
 ## Workshop
 
-This workshop is powered by [Streamlit](https://streamlit.io/) and [Gitpod](https://gitpod.io/) which provides a developer environment ready to begin minting NFTs. Simply click the button below to begin building.  
+This workshop is powered by [Streamlit](https://streamlit.io/) and [Gitpod](https://gitpod.io/) which provides a developer environment ready to begin minting NFTs. Simply click the button below to begin building.  Follow the steps through the Streamlit application to guide you to deploying your NFT contract 
 
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/banjtheman/polygon_nft_workshop/)

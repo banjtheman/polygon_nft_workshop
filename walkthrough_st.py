@@ -328,54 +328,53 @@ type YOUR_NFT_NAME @entity {
         """
         )
 
+        st.write("Update your graph")
+        st.code("graph codegen")
+
+
         st.markdown("**3. Update src/mapping.ts**")
         st.write("Replace the code with the following, while adding in your values")
         st.code(
             """
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
-YOUR_NFT_CONTRACT,
-Transfer
-} from "../generated/YOUR_NFT_CONTRACT/YOUR_NFT_CONTRACT"
-import { YOUR_ENTITY } from "../generated/schema"
+  NFT_NAME,
+  Transfer
+} from "../generated/PolygonWorkshop/PolygonWorkshop"
+import { ENTITY_NAME } from "../generated/schema"
 
 export function handleTransfer(event: Transfer): void {
-// Entities can be loaded from the store using a string ID; this ID
-// needs to be unique across all entities of the same type
-
-var token_id = event.params.tokenId.toString()
-var token_id_int = event.params.tokenId.toI32()
-
-
-let my_nft = YOUR_ENTITY.load(token_id)
-
-if (!gitnft_val) {
-    my_nft = new YOUR_ENTITY(event.params.tokenId.toString())
-
-    let tokenContract = YOUR_NFT_CONTRACT.bind(event.address);
-    my_nft.owner = event.params.to.toHexString()
-    my_nft.tokenURI = tokenContract.tokenURI(event.params.tokenId);
-    my_nft.tokenID = token_id_int
-
-
+  // Entities can be loaded from the store using a string ID; this ID
+  // needs to be unique across all entities of the same type
+  
+  var token_id = event.params.tokenId.toString()
+  var token_id_int = event.params.tokenId.toI32()
+  
+  let my_nft = ENTITY_NAME.load(token_id)
+  let tokenContract = NFT_NAME.bind(event.address);
+  
+  if (!my_nft) {
+      my_nft = new ENTITY_NAME(event.params.tokenId.toString())
+  
+      my_nft.owner = event.params.to.toHexString()
+      my_nft.tokenURI = tokenContract.tokenURI(event.params.tokenId);
+      my_nft.tokenID = token_id_int
+  }
+  
+  else {
+      my_nft.owner = event.params.to.toHexString()
+      my_nft.tokenURI = tokenContract.tokenURI(event.params.tokenId);
+      my_nft.tokenID = token_id_int
+  }
+  
+  my_nft.save();
 }
-else {
-    // todo update token uri
-    my_nft.owner = event.params.to.toHexString()
-    TODO
-    my_nft.tokenID = token_id_int
-}
-
-
-my_nft.save();
-
-    }
     """
         )
 
         st.markdown("**4. Deploy your subgraph**")
         st.write("Run the following commands to deploy your subgraph")
-        st.code("graph codegen && graph build")
+        st.code("graph build")
         st.code("graph deploy --studio test_graph")
 
     if module == "15. Query your NFT Contract":
@@ -388,6 +387,9 @@ my_nft.save();
         st.code(
             "python query_graph.py --address YOUR_ADDRESS --entity_name YOUR_ENTIY_NAME --subgraph_api YOUR_API_ENDPOINT"
         )
+
+        st.info("You can find your API link in the details tab in the Graph Studio")
+        st.info("You may have to add an 's' to your entity name e.g polygontest -> polygontests")
 
 
 def get_items() -> List:
