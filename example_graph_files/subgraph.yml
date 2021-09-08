@@ -1,0 +1,24 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: WST
+    network: mumbai
+    source:
+      address: "0x637868A804816f2c78bf8fb8a877714f4D8381BB"
+      abi: WorkshopTest
+      startBlock: 18438916
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - WST
+      abis:
+        - name: WorkshopTest
+          file: ./abis/WorkshopTest.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts

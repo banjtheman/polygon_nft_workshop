@@ -299,7 +299,19 @@ Summary
         )
         st.code("graph init --studio test_graph")
 
-        
+    if module == "14. Deploy your subgraph":
+        st.write("Now we need to update the generated code")
+        st.markdown("**1. Add the startblock to the subgraph.yaml**")
+        st.write(
+            "Find the start block from the polygon scan https://mumbai.polygonscan.com/address/YOUR_CONTRACT_ADDRESS"
+        )
+        st.image("images/startblock.png")
+
+        st.write("Now add the `startBlock` field in subgraph.yaml")
+        st.image("images/add_startblock.png")
+
+
+        st.markdown("**2. Add the startblock to the subgraph.yaml**")
 
 
 def get_items() -> List:
