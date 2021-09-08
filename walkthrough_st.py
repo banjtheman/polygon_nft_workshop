@@ -281,6 +281,26 @@ Summary
             "You may have to enter your contrarct address into the OpenSea search box"
         )
 
+    if module == "12. Sign up for The Graph":
+
+        st.write(
+            "Now we are going to utilze The Graph to give us an API to query our contract"
+        )
+
+        st.write(
+            f"Sign in with your wallet here https://thegraph.com/studio/ and create a new subgraph"
+        )
+
+        st.image("images/graph_logo.png")
+
+    if module == "13. Initialize your subgraph":
+        st.write(
+            "Once your subgraph is created you can use the graph-cli to initalize your subgraph"
+        )
+        st.code("graph init --studio test_graph")
+
+        
+
 
 def get_items() -> List:
     """
@@ -532,6 +552,10 @@ def sidebar_navigation() -> None:
         "9. Create Metadata JSON",
         "10. Mint NFT",
         "11. View NFT on OpenSea",
+        "12. Sign up for The Graph",
+        "13. Initialize your subgraph",
+        "14. Deploy your subgraph",
+        "15. Query your NFT Contract",
     ]
 
     module = st.sidebar.selectbox("Modules", modules)

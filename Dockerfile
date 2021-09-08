@@ -6,7 +6,8 @@ ADD package-lock.json ./
 ADD package.json ./
 RUN pip install -r requirements.txt
 RUN npm install --save-dev
-RUN npm install truffle -g
+RUN npm install -g truffle 
+RUN npm install -g @graphprotocol/graph-cli
 
 # Expose port
 EXPOSE 8501
