@@ -298,6 +298,20 @@ Summary
             "Once your subgraph is created you can use the graph-cli to initalize your subgraph"
         )
         st.code("graph init --studio test_graph")
+        st.write("1. Select mumbai for network ")
+        st.write("2. Enter in your contract address")
+        st.write("3. Enter in the ABI Path that we used in step 10.")
+
+        st.info("Example...")
+        st.code(
+        """
+✔ Ethereum network · mumbai  
+✔ Contract address · 0x30B5423D1e60b79c1D9137F3793B81f5186ABd2E  
+✖ Failed to fetch ABI from Etherscan: request to https://api-mumbai.etherscan.io/api?module=contract&action=getabi&address=0x30B5423D1e60b79c1D9137F3793B81f5186ABd2E failed, reason: getaddrinfo ENOTFOUND api-mumbai.etherscan.io  
+✔ ABI file (path) · ./build/contracts/PolygonWorkshop.json  
+        """)
+
+        st.write("Now login to the graph using your api key")
         st.code("graph auth --studio YOUR_API_KEY")
         st.code("cd test_graph")
 
