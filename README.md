@@ -20,6 +20,10 @@ This workshop is powered by [Streamlit](https://streamlit.io/) and [Gitpod](http
 **Note:** You may have to allow a popup to open to display the Streamlit app  
 
 
+> ![Workshop Screenshot](images/workshop_screenshot.png)
+
+
+
 
 
 
