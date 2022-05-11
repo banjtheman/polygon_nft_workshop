@@ -1,6 +1,6 @@
 # Docker image
 image:
-  file: Dockerfile
+  file: .gitpod.Dockerfile
 
 # List of the vs code extensions
 vscode:
