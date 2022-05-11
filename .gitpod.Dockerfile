@@ -14,6 +14,5 @@ RUN npm install -g @graphprotocol/graph-cli
 # Expose port
 EXPOSE 8501
 
-USER gitpod
 # # Start App
 # CMD [ "tail", "-f" ,"/dev/null" ]
