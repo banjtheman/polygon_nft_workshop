@@ -1,6 +1,6 @@
 # Docker image
-#image:
-#  file: .gitpod.Dockerfile
+image:
+  file: .gitpod.Dockerfile
 
 # List of the vs code extensions
 vscode:
@@ -19,14 +19,14 @@ tasks:
   # - init: echo "npm already run"
   #   command: echo "npm install done"
 
-  - init: echo "install prereqs"
-    command: npm install --save-dev
+  # - init: echo "install prereqs"
+  #   command: npm install --save-dev
 
-  - init: echo "install truffle"
-    command: npm install -g truffle 
+  # - init: echo "install truffle"
+  #   command: npm install -g truffle 
 
-  - init: echo "install graphcli"
-    command: npm install -g @graphprotocol/graph-cli 
+  # - init: echo "install graphcli"
+  #   command: npm install -g @graphprotocol/graph-cli 
 
   - init: pip install -r requirements.txt
     command: streamlit run walkthrough_st.py
