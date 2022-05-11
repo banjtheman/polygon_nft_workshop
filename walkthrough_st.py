@@ -98,7 +98,7 @@ def render_module(module) -> None:
             "In order to interact with blockchain applications you will need to install [MetaMask](https://metamask.io/download.html)"
         )
 
-        st.image("https://metamask.io/images/download-extension.png")
+        st.image("https://images.ctfassets.net/9sy2a0egs6zh/6ngCUoU36ABPjs6cDNnuoK/a4b9e978595248dbb685aa2c53e3f4dc/download-extension.png")
 
     if module == "3. Sign up for Infura":
         st.write(
