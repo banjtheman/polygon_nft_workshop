@@ -125,8 +125,11 @@ def render_module(module) -> None:
         st.write(
             "Before we can deploy to the testnet we will need to get MATIC from the facuet"
         )
+        st.write("You will have to add the mumbai testnet to your wallet, following instructions here https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask")
+        
+        
         st.write(
-            "The Faucet allows you to get free MATIC on test networks, simply enter your public key to get funds"
+            "The Faucet allows you to get free MATIC on test networks, simply enter your public key from Metamask to get funds"
         )
         st.write("https://faucet.matic.network/")
 
