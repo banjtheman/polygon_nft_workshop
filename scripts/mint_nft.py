@@ -128,8 +128,8 @@ def web3_mint(userAddress: str, tokenURI: str, eth_json: Dict[str, Any]) -> str:
     mint_txn = CODE_NFT.functions.mint(userAddress, tokenURI).buildTransaction(
         {
             "chainId": CHAIN_ID,
-            "gas": 10000000,
-            "gasPrice": w3.toWei("1", "gwei"),
+            "gas": 3000000,
+            "gasPrice": w3.eth.gasPrice,
             "nonce": nonce,
         }
     )

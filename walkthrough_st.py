@@ -98,17 +98,17 @@ def render_module(module) -> None:
             "In order to interact with blockchain applications you will need to install [MetaMask](https://metamask.io/download.html)"
         )
 
-        st.image("https://images.ctfassets.net/9sy2a0egs6zh/6ngCUoU36ABPjs6cDNnuoK/a4b9e978595248dbb685aa2c53e3f4dc/download-extension.png")
+        st.image(
+            "https://images.ctfassets.net/9sy2a0egs6zh/6ngCUoU36ABPjs6cDNnuoK/a4b9e978595248dbb685aa2c53e3f4dc/download-extension.png"
+        )
 
     if module == "3. Sign up for Infura":
         st.write(
             "[Infura](https://infura.io/) provides APIs that make it easy to interact with the blockchain. In order to deploy our smart contract to the Polygon Testnet we will need Infura"
         )
 
-        st.write("Once you sign up, be sure to add the Polygon PoS network add-on")
-        st.image("./images/infura_polygon_addon.png")
         st.write(
-            "Next create a new Project, and save the Project ID. We will need the ID for deployment"
+            "Once logged in create a new Project, and save the Project ID. We will need the ID for deployment"
         )
 
     if module == "4. Edit Smart Contract":
@@ -125,9 +125,10 @@ def render_module(module) -> None:
         st.write(
             "Before we can deploy to the testnet we will need to get MATIC from the facuet"
         )
-        st.write("You will have to add the mumbai testnet to your wallet, following instructions here https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask")
-        
-        
+        st.write(
+            "You will have to add the mumbai testnet to your wallet, following instructions here https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask"
+        )
+
         st.write(
             "The Faucet allows you to get free MATIC on test networks, simply enter your public key from Metamask to get funds"
         )
@@ -265,7 +266,7 @@ Summary
         export PRIVATE_KEY=PRIVATE_KEY
         export INFURA_KEY=INFURA_KEY
         export NETWORK="mumbai"
-        python mint_nft.py --contract_address CONTRACT_ADDRESS --abi_path ABI_PATH --to_address TO_ADDRESS --token_metadata_url
+        python mint_nft.py --contract_address YOUR_CONTRACT_ADDRESS --abi_path ABI_PATH --to_address YOUR_PUBLIC_KEY --token_metadata_url IPFS_LINK_FROM_STEP_9
         ```
         """
         )
@@ -307,12 +308,13 @@ Summary
 
         st.info("Example...")
         st.code(
-        """
+            """
 ✔ Ethereum network · mumbai  
 ✔ Contract address · 0x30B5423D1e60b79c1D9137F3793B81f5186ABd2E  
 ✖ Failed to fetch ABI from Etherscan: request to https://api-mumbai.etherscan.io/api?module=contract&action=getabi&address=0x30B5423D1e60b79c1D9137F3793B81f5186ABd2E failed, reason: getaddrinfo ENOTFOUND api-mumbai.etherscan.io  
 ✔ ABI file (path) · ./build/contracts/PolygonWorkshop.json  
-        """)
+        """
+        )
 
         st.write("Now login to the graph using your api key")
         st.code("graph auth --studio YOUR_API_KEY")
@@ -347,7 +349,6 @@ type YOUR_NFT_NAME @entity {
 
         st.write("Update your graph")
         st.code("graph codegen")
-
 
         st.markdown("**3. Update src/mapping.ts**")
         st.write("Replace the code with the following, while adding in your values")
@@ -406,7 +407,9 @@ export function handleTransfer(event: Transfer): void {
         )
 
         st.info("You can find your API link in the details tab in the Graph Studio")
-        st.info("You may have to add an 's' to your entity name e.g polygontest -> polygontests")
+        st.info(
+            "You may have to add an 's' to your entity name e.g polygontest -> polygontests"
+        )
 
 
 def get_items() -> List:
@@ -432,52 +435,53 @@ def get_items() -> List:
     return items
 
 
-def mint_nft_module():
-    """
-    Purpose:
-        Mint your NFT
-    Args:
-        N/A
-    Returns:
-        N/A
-    """
-    items = get_items()
-    item_list = list(items.keys())
-    item_list_name = st.selectbox("Items", item_list)
+# Not used
+# def mint_nft_module():
+#     """
+#     Purpose:
+#         Mint your NFT
+#     Args:
+#         N/A
+#     Returns:
+#         N/A
+#     """
+#     items = get_items()
+#     item_list = list(items.keys())
+#     item_list_name = st.selectbox("Items", item_list)
 
-    if item_list_name:
+#     if item_list_name:
 
-        item_obj = items[item_list_name]
+#         item_obj = items[item_list_name]
 
-        token_uri = item_obj["ipfs_url"]
-        item_json = item_obj["item"]
+#         token_uri = item_obj["ipfs_url"]
+#         item_json = item_obj["item"]
 
-        st.write("Item metadata")
-        st.write(item_json)
+#         st.write("Item metadata")
+#         st.write(item_json)
 
-        token_address = st.text_input("Address to send token", "")
+#         token_address = st.text_input("Address to send token", "")
 
-        if st.button(f"Mint token"):
-            with st.spinner("Minting..."):
-                eth_json = mint_nft.set_up_blockchain(
-                    contract,
-                    abi_path,
-                    public_key,
-                    private_key,
-                    infura_key,
-                    network,
-                )
+#         if st.button(f"Mint token"):
+#             with st.spinner("Minting..."):
+#                 eth_json = mint_nft.set_up_blockchain(
+#                     contract,
+#                     abi_path,
+#                     public_key,
+#                     private_key,
+#                     infura_key,
+#                     network,
+#                 )
 
-                txn_hash = mint_nft.web3_mint(token_address, token_uri, eth_json)
+#                 txn_hash = mint_nft.web3_mint(token_address, token_uri, eth_json)
 
-                if network == "mumbai":
-                    scan_url = "https://explorer-mumbai.maticvigil.com/tx/"
-                elif network == "rinkeby":
-                    scan_url = "https://rinkeby.etherscan.io/tx/"
+#                 if network == "mumbai":
+#                     scan_url = "https://explorer-mumbai.maticvigil.com/tx/"
+#                 elif network == "rinkeby":
+#                     scan_url = "https://rinkeby.etherscan.io/tx/"
 
-                st.success(f"txn hash: {txn_hash}")
-                st.write(f"{scan_url}{txn_hash}")
-                st.balloons()
+#                 st.success(f"txn hash: {txn_hash}")
+#                 st.write(f"{scan_url}{txn_hash}")
+#                 st.balloons()
 
 
 def create_metadata_json():
