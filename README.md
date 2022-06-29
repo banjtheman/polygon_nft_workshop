@@ -8,6 +8,7 @@ By the end of this workshop, you will have completed the following
 * Mint an NFT that is listed on [OpenSea](https://opensea.io/)
 * Query your NFT contract using [The Graph](https://thegraph.com/)
 
+Slides: https://docs.google.com/presentation/d/1C7PB35izKGGu7fGFP6toIsIPd0ST3vOQtiqAncGYtKU/edit?usp=sharing
 
 ## Workshop
 
