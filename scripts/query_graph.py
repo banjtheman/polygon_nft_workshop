@@ -32,7 +32,7 @@ def query_subgraph(api_endpoint: str, address: str, entity_name: str) -> List:
     """
     )
 
-    request = requests.post(api_endpoint, json={"query": query})
+    request = requests.post(api_endpoint, json={"query": query}, timeout=60)
 
     if request.status_code == 200:
         if "errors" in request.json():
