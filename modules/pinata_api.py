@@ -1,8 +1,7 @@
-import json
-from typing import Type, Union, Dict, Any, List
+from typing import Dict, Any, List
 import requests
-import os
 from pathlib import Path
+from security import safe_requests
 
 
 def pinJSONToIPFS(
@@ -90,7 +89,7 @@ def pinSearch(
         "pinata_api_key": pinata_api_key,
         "pinata_secret_api_key": pinata_secret,
     }
-    response = requests.get(endpoint_uri, headers=HEADERS, timeout=60).json(timeout=60)
+    response = safe_requests.get(endpoint_uri, headers=HEADERS, timeout=60).json(timeout=60)
 
     # now get the actual data from this
     data = []
@@ -98,8 +97,7 @@ def pinSearch(
 
         for item in response["rows"]:
             ipfs_pin_hash = item["ipfs_pin_hash"]
-            hash_data = requests.get(
-                f"https://gateway.pinata.cloud/ipfs/{ipfs_pin_hash}", 
+            hash_data = safe_requests.get(f"https://gateway.pinata.cloud/ipfs/{ipfs_pin_hash}", 
             timeout=60).json(timeout=60)
             data.append(hash_data)
 
