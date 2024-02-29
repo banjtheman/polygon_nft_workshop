@@ -1,3 +1,4 @@
 streamlit
 web3
 requests
+security~=1.2.0
